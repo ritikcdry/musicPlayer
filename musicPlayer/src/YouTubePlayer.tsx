@@ -101,7 +101,6 @@ const YouTubePlayer: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // navigate home on logo click
   const handleHomeClick = () => navigate("/");
 
   return (
