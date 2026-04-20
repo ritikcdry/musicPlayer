@@ -195,7 +195,7 @@ const YouTubePlayer: React.FC = () => {
             max="100"
             value={progress}
             onChange={handleSeek}
-            className="flex-1 h-2 self-center accent-green-400 drop-shadow-[0_0_10px_#22c55e] hover:scale-[1.02] transition"
+            className="flex-1 h-1 self-center accent-green-400 drop-shadow-[0_0_10px_#22c55e] hover:scale-[1.02] transition"
           />
         </div>
 

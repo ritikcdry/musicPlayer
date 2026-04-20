@@ -258,7 +258,7 @@ const LocalPlayer: React.FC = () => {
               onMouseUp={() => setIsSeeking(false)}
               onTouchStart={() => setIsSeeking(true)}
               onTouchEnd={() => setIsSeeking(false)}
-              className="w-full mt-4 accent-green-400 drop-shadow-[0_0_10px_#22c55e] hover:scale-[1.02] transition"
+              className="w-full mt-6 h-1 accent-green-400 drop-shadow-[0_0_10px_#22c55e] hover:scale-[1.02] transition"
             />
 
             {/* Controls */}
