@@ -30,7 +30,7 @@ const LocalPlayer: React.FC = () => {
 
   const navigate = useNavigate();
 
-  // 🎵 Upload songs
+  //  Upload songs
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
@@ -47,7 +47,7 @@ const LocalPlayer: React.FC = () => {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // 🔥 SAFE PLAY (prevents duplicate audio)
+  //  SAFE PLAY (prevents duplicate audio)
   const safePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -60,7 +60,7 @@ const LocalPlayer: React.FC = () => {
     }, 30);
   };
 
-  // ▶ Play song
+  //  Play song
   const playSong = (index: number) => {
     const audio = audioRef.current;
     if (!audio || !songs.length) return;
@@ -74,7 +74,7 @@ const LocalPlayer: React.FC = () => {
     }, 50);
   };
 
-  // ⏯ Play / Pause
+  //  Play / Pause
   const togglePlayPause = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -87,7 +87,7 @@ const LocalPlayer: React.FC = () => {
     }
   };
 
-  // ⏭ Next
+  //  Next
   const nextSong = () => {
     if (!songs.length) return;
 
@@ -98,13 +98,13 @@ const LocalPlayer: React.FC = () => {
     }
   };
 
-  // ⏮ Prev
+  //  Prev
   const prevSong = () => {
     if (!songs.length) return;
     playSong((currentIndex - 1 + songs.length) % songs.length);
   };
 
-  // 🗑 Delete
+  //  Delete
   const deleteSong = (index: number) => {
     const updated = songs.filter((_, i) => i !== index);
     setSongs(updated);
@@ -123,7 +123,7 @@ const LocalPlayer: React.FC = () => {
     }
   };
 
-  // 🎧 Progress update (NO seeking interference)
+  //  Progress update (NO seeking interference)
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -142,7 +142,7 @@ const LocalPlayer: React.FC = () => {
     };
   }, [isSeeking]);
 
-  // ⏩ Seek (NO playback trigger)
+  //  Seek (NO playback trigger)
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const audio = audioRef.current;
     if (!audio || !audio.duration) return;
@@ -153,7 +153,7 @@ const LocalPlayer: React.FC = () => {
     setProgress(value);
   };
 
-  // 🔊 Volume
+  //  Volume
   const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = Number(e.target.value);
 
@@ -166,7 +166,7 @@ const LocalPlayer: React.FC = () => {
     }
   };
 
-  // 🔇 Mute
+  //  Mute
   const toggleMute = () => {
     if (!audioRef.current) return;
 
@@ -182,7 +182,7 @@ const LocalPlayer: React.FC = () => {
     }
   };
 
-  // 🔚 End song
+  //  End song
   const handleEnd = () => {
     if (isRepeat) {
       safePlay();

@@ -21,7 +21,7 @@ const YouTubePlayer: React.FC = () => {
 
   const playerRef = useRef<any>(null);
 
-  // 🔍 SEARCH
+  //  Search
   const search = async () => {
     if (!query.trim()) return;
 
@@ -34,7 +34,7 @@ const YouTubePlayer: React.FC = () => {
     setShowDropdown(true);
   };
 
-  // ▶ PLAY
+  //  Play
   const play = (i: number) => {
     const selected = results[i];
     setVideoId(selected?.id?.videoId);
@@ -43,14 +43,14 @@ const YouTubePlayer: React.FC = () => {
     setIsPlaying(true);
   };
 
-  // 🗑 HISTORY
+  //  History
   const deleteHistory = (i: number) => {
     setHistory((prev) => prev.filter((_, index) => index !== i));
   };
 
   const clearHistory = () => setHistory([]);
 
-  // ▶ PLAY / PAUSE
+  //  Play / Pause
   const togglePlay = () => {
     if (!playerRef.current) return;
 
@@ -60,7 +60,7 @@ const YouTubePlayer: React.FC = () => {
     setIsPlaying(!isPlaying);
   };
 
-  // ⏩ SEEK
+  //  Seek
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     setProgress(value);
@@ -69,7 +69,7 @@ const YouTubePlayer: React.FC = () => {
     playerRef.current.seekTo((value / 100) * duration);
   };
 
-  // 🔊 VOLUME
+  //  Volume
   const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     setVolume(value);
@@ -83,7 +83,7 @@ const YouTubePlayer: React.FC = () => {
     setIsMuted(!isMuted);
   };
 
-  // 📊 PROGRESS TRACKING
+  //  Progress tracking
   useEffect(() => {
     const interval = setInterval(() => {
       if (playerRef.current) {
@@ -104,7 +104,7 @@ const YouTubePlayer: React.FC = () => {
   return (
     <div className="h-screen flex bg-gradient-to-br from-black via-gray-900 to-black text-white">
 
-      {/* LEFT SIDEBAR */}
+      {/* Left slide */}
       <div className="w-64 bg-black/60 p-5 hidden md:flex flex-col">
         <h1 className="text-2xl text-green-500 font-bold mb-6">
           YouTube Player 🎧
@@ -115,13 +115,13 @@ const YouTubePlayer: React.FC = () => {
         </button>
       </div>
 
-      {/* MAIN CONTENT */}
+      {/* Main Content */}
 <div className="flex-1 flex flex-col items-center justify-center">
 
-  {/* WRAPPER */}
+  {/* Wrapper */}
   <div className="w-full max-w-md flex flex-col items-center">
 
-    {/* SEARCH */}
+    {/* Search */}
     <div className="relative w-full">
 
       <div className="flex overflow-hidden rounded-lg shadow-lg">
@@ -141,7 +141,7 @@ const YouTubePlayer: React.FC = () => {
         </button>
       </div>
 
-      {/* DROPDOWN */}
+      {/* Dropdown */}
       {showDropdown && results.length > 0 && (
         <div className="absolute left-0 top-full mt-2 w-full bg-white text-black rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
           {results.map((item, i) => (
@@ -157,11 +157,11 @@ const YouTubePlayer: React.FC = () => {
       )}
     </div>
 
-    {/* 🎵 PLAYER (CENTERED BELOW SEARCH) */}
+    {/*  Player */}
     {videoId && (
       <div className="mt-6 w-full bg-white/10 p-4 rounded-xl">
 
-        {/* Hidden YouTube Player */}
+        {/* Hidden Player */}
         <YouTube
           videoId={videoId}
           opts={{
@@ -176,7 +176,7 @@ const YouTubePlayer: React.FC = () => {
           }}
         />
 
-        {/* PLAY + SLIDER */}
+        {/* Play + slider */}
         <div className="flex items-center gap-4">
 
           <button
@@ -197,7 +197,7 @@ const YouTubePlayer: React.FC = () => {
           />
         </div>
 
-        {/* VOLUME */}
+        {/* Volume */}
         <div className="flex items-center gap-4 mt-3">
 
           <button
@@ -225,7 +225,7 @@ const YouTubePlayer: React.FC = () => {
 </div>
 
 
-      {/* RIGHT HISTORY */}
+      {/* Right side History */}
       <div className="w-72 bg-black/60 p-4 overflow-y-auto hidden md:block">
         <div className="flex justify-between mb-4">
           <h2 className="text-green-400 font-bold">History</h2>
