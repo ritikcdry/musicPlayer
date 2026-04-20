@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import YouTube from "react-youtube";
 import { useNavigate } from "react-router-dom";
 
-const API_KEY = "AIzaSyCt8ZzzMVj8ZBAVixDY_DEqTrrk8C0L79A";
+const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 
 const YouTubePlayer: React.FC = () => {
   const navigate = useNavigate();
