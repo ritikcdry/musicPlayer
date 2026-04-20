@@ -41,6 +41,8 @@ const YouTubePlayer: React.FC = () => {
     setHistory((prev) => [selected, ...prev]);
     setShowDropdown(false);
     setIsPlaying(true);
+    setQuery("");
+    setResults([]);
   };
 
   //  History
@@ -127,7 +129,7 @@ const YouTubePlayer: React.FC = () => {
       <div className="flex overflow-hidden rounded-lg shadow-lg">
         <input
           className="flex-1 px-4 py-2 bg-white text-black outline-none"
-          placeholder="Search YouTube..."
+          placeholder="Search Music Here..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && search()}
