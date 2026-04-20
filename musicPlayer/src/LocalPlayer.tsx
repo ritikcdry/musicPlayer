@@ -123,7 +123,7 @@ const LocalPlayer: React.FC = () => {
     }
   };
 
-  //  Progress update (NO seeking interference)
+  //  Progress update 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -142,7 +142,7 @@ const LocalPlayer: React.FC = () => {
     };
   }, [isSeeking]);
 
-  //  Seek (NO playback trigger)
+  //  Seek 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const audio = audioRef.current;
     if (!audio || !audio.duration) return;
