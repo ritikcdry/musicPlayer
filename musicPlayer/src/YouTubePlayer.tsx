@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import YouTube from "react-youtube";
 import { useNavigate } from "react-router-dom";
+import useYoutubeDownload from "./hooks/useYoutubeDownload";
 
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 
@@ -18,6 +19,9 @@ const YouTubePlayer: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
 
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const [currentTitle, setCurrentTitle] = useState<string>("");
+  const { loading: downloading, error: downloadError, downloadAudio } = useYoutubeDownload();
 
   const playerRef = useRef<any>(null);
 
@@ -38,6 +42,7 @@ const YouTubePlayer: React.FC = () => {
   const play = (i: number) => {
     const selected = results[i];
     setVideoId(selected?.id?.videoId);
+    setCurrentTitle(selected?.snippet?.title ?? "");
     setHistory((prev) => [selected, ...prev]);
     setShowDropdown(false);
     setIsPlaying(true);
@@ -102,7 +107,8 @@ const YouTubePlayer: React.FC = () => {
   }, []);
 
   const handleHomeClick = () => navigate("/");
-
+  // Download Song
+ 
   return (
     <div className="h-screen flex bg-gradient-to-br from-black via-gray-900 to-black text-white">
 
@@ -201,7 +207,6 @@ const YouTubePlayer: React.FC = () => {
 
         {/* Volume */}
         <div className="flex items-center gap-4 mt-3">
-
           <button
           onClick={toggleMute}
           className="w-10 h-10 flex items-center justify-center text-xl hover:scale-110 transition"
@@ -209,16 +214,31 @@ const YouTubePlayer: React.FC = () => {
           {isMuted ? "🔇" : "🔊"}
           </button>
 
-
           <input
-            type="range"
-            min="0"
-            max="100"
-            value={volume}
-            onChange={handleVolume}
-            className="flex-1 h-2 self-center accent-blue-500 drop-shadow-[0_0_8px_#3b82f6] hover:scale-[1.02] transition"
+          type="range"
+          min="0"
+          max="100"
+          value={volume}
+          onChange={handleVolume}
+          className="flex-1 h-2 self-center accent-blue-500 drop-shadow-[0_0_8px_#3b82f6] hover:scale-[1.02] transition"
           />
         </div>
+
+        {/* Download button */}
+        <div className="w-full flex flex-col items-center mt-4 gap-1">
+          <button
+          onClick={() => videoId && downloadAudio(videoId, currentTitle)}
+          disabled={downloading}
+          className="w-full mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold py-2.5 rounded-xl shadow-[0_0_15px_#22c55e] hover:shadow-[0_0_25px_#22c55e] hover:scale-105 active:scale-95 transition-all duration-200"
+          >
+          {downloading ? "⏳ Downloading..." : " Download "}
+          </button>
+
+          {/* Shows error message if download fails */}
+          {downloadError && (
+            <p className="text-red-400 text-xs mt-1">{downloadError}</p>
+          )}
+      </div>
 
       </div>
     )}
