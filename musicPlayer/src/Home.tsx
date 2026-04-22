@@ -45,7 +45,7 @@ const Home = () => {
 
         {/* Title */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-extrabold text-white mb-4">🎵 Music App</h1>
+          <h1 className="text-5xl font-extrabold text-white mb-4">🎵 Aura Music</h1>
           <p className="text-sm font-medium text-gray-400 max-w-md mx-auto">
             Elevate your auditory experience with seamless local playback and global streaming.
           </p>
