@@ -67,7 +67,7 @@ const Home = () => {
             <div className="mt-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               {/* Navigates to local player on click */}
               <button className="bg-white text-black px-6 py-2 rounded-full text-xs font-semibold uppercase tracking-widest">
-                Open Library
+                Upload songs
               </button>
             </div>
           </div>
