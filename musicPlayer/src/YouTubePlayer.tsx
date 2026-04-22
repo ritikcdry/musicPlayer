@@ -14,7 +14,7 @@ const YouTubePlayer: React.FC = () => {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [volume, setVolume] = useState(50);
+  const [volume, setVolume] = useState(100);
   const [isMuted, setIsMuted] = useState(false);
 
   const [showDropdown, setShowDropdown] = useState(false);
