@@ -320,8 +320,8 @@ const LocalPlayer: React.FC = () => {
           type="range" min={0} max={1} step={0.01} value={volume}
           onChange={changeVolume}
           disabled={!currentSong}
-          className="flex-1 accent-blue-400 drop-shadow-[0_0_8px_#3b82f6] cursor-pointer disabled:opacity-40"
-          style={{ height: "2px", marginTop: "0", verticalAlign: "middle" }}
+          className="flex-1 accent-blue-500 drop-shadow-[0_0_8px_#3b82f6] cursor-pointer disabled:opacity-40"
+          style={{ height: "4px", marginTop: "0", verticalAlign: "middle" }}
           />
         </div>
         </div>
