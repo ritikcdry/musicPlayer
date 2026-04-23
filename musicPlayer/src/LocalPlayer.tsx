@@ -239,104 +239,112 @@ const LocalPlayer: React.FC = () => {
           </label>
         </div>
 
-        {songs.length ? (
-          <div className="max-w-sm w-full glass-panel rounded-[2rem] p-6 md:p-8 flex flex-col items-center shadow-2xl relative overflow-hidden group">
+        {/* Player card — always visible */}
+        <div className="max-w-sm w-full glass-panel rounded-[2rem] p-6 md:p-8 flex flex-col items-center shadow-2xl relative overflow-hidden group">
 
-            {/* Background glow effect behind album art */}
-            <div className="absolute -top-24 -left-24 w-64 h-64 bg-green-500/10 blur-[100px] rounded-full" />
+          <div className="absolute -top-24 -left-24 w-64 h-64 bg-green-500/10 blur-[100px] rounded-full" />
 
-            {/* Album cover image */}
-            <div className="relative w-52 h-52 md:w-64 md:h-64 mb-6">
-              <img
-                src={songs[currentIndex].cover}
-                className="w-full h-full object-cover rounded-3xl shadow-2xl border border-white/10 transform transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/20" />
-            </div>
-
-            {/* Song title */}
-            <div className="text-center mb-6 w-full">
-              <h2 className="text-lg font-bold text-white mb-1 truncate px-2">
-                {songs[currentIndex].name}
-              </h2>
-              <p className="text-green-400 text-sm font-medium tracking-wide">Local Track</p>
-            </div>
-
-            {/* Progress slider with current time and duration timer */}
-            <div className="w-full space-y-2 mb-6">
-              <div className="flex justify-between text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                <span>{formatTime(currentTime)}</span>
-                <span>{formatTime(duration)}</span>
-              </div>
-              <input
-                type="range"
-                value={progress}
-                onChange={handleSeek}
-                onMouseDown={() => setIsSeeking(true)}
-                onMouseUp={() => setIsSeeking(false)}
-                onTouchStart={() => setIsSeeking(true)}
-                onTouchEnd={() => setIsSeeking(false)}
-                className="w-full h-1.5 accent-green-400 drop-shadow-[0_0_10px_#22c55e] cursor-pointer"
-              />
-            </div>
-
-            {/* Playback controls: shuffle, prev, play/pause, next, repeat */}
-            <div className="flex items-center justify-between w-full mb-6">
-              <button
-                onClick={() => setIsShuffle(!isShuffle)}
-                className={`transition-colors ${isShuffle ? "text-green-400" : "text-gray-400 hover:text-white"}`}
-              >
-                <span className="material-symbols-outlined text-2xl">shuffle</span>
-              </button>
-              <button onClick={prevSong} className="text-white hover:scale-110 transition-transform">
-                <span className="material-symbols-outlined text-3xl">skip_previous</span>
-              </button>
-              <button
-                onClick={togglePlayPause}
-                className="w-14 h-14 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-all glow-green"
-              >
-                <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  {isPlaying ? "pause" : "play_arrow"}
-                </span>
-              </button>
-              <button onClick={nextSong} className="text-white hover:scale-110 transition-transform">
-                <span className="material-symbols-outlined text-3xl">skip_next</span>
-              </button>
-              <button
-                onClick={() => setIsRepeat(!isRepeat)}
-                className={`transition-colors ${isRepeat ? "text-green-400" : "text-gray-400 hover:text-white"}`}
-              >
-                <span className="material-symbols-outlined text-2xl">repeat</span>
-              </button>
-            </div>
-
-            {/* Volume control with mute toggle */}
-            <div className="w-full flex items-center gap-3 px-2">
-              <button onClick={toggleMute}>
-                <span className="material-symbols-outlined text-gray-400 text-sm">
-                  {isMuted ? "volume_off" : "volume_down"}
-                </span>
-              </button>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={volume}
-                onChange={changeVolume}
-                className="flex-1 h-1 accent-blue-400 drop-shadow-[0_0_8px_#3b82f6] cursor-pointer"
-              />
-              <span className="material-symbols-outlined text-gray-400 text-sm">volume_up</span>
-            </div>
+          {/* Album art — placeholder until a song is played */}
+          <div className="relative w-52 h-52 md:w-64 md:h-64 mb-6">
+          {currentSong ? (
+            <img
+            src={currentSong.cover}
+            className="w-full h-full object-cover rounded-3xl shadow-2xl border border-white/10 transform transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+          <div className="w-full h-full rounded-3xl border border-white/10 bg-white/5 flex flex-col items-center justify-center gap-3">
+            <span className="material-symbols-outlined text-5xl text-gray-500">library_music</span>
+            <p className="text-gray-400 text-sm text-center px-4">Upload songs to start 🎧</p>
           </div>
-        ) : (
-          <div className="text-center">
-            <span className="material-symbols-outlined text-6xl text-gray-600 mb-4 block">library_music</span>
-            <p className="text-gray-400 text-sm">Upload songs to start 🎧</p>
+          )}
+          <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/20" />
           </div>
-        )}
 
-        <audio ref={audioRef} src={songs[currentIndex]?.url} onEnded={handleEnd} />
+          {/* Song title — persists from currentSong even after playlist deletion */}
+          <div className="text-center mb-6 w-full">
+            <h2 className="text-lg font-bold text-white mb-1 truncate px-2">
+            {currentSong ? currentSong.name : "No song selected"}
+            </h2>
+            <p className="text-green-400 text-sm font-medium tracking-wide">
+            {currentSong ? "Local Track" : "—"}
+            </p>
+          </div>
+
+  {/* Progress slider with timer */}
+  <div className="w-full space-y-2 mb-6">
+    <div className="flex justify-between text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+      <span>{formatTime(currentTime)}</span>
+      <span>{formatTime(duration)}</span>
+    </div>
+    <input
+      type="range"
+      value={progress}
+      onChange={handleSeek}
+      onMouseDown={() => setIsSeeking(true)}
+      onMouseUp={() => setIsSeeking(false)}
+      onTouchStart={() => setIsSeeking(true)}
+      onTouchEnd={() => setIsSeeking(false)}
+      disabled={!currentSong}
+      className="w-full h-1.5 accent-green-400 drop-shadow-[0_0_10px_#22c55e] cursor-pointer disabled:opacity-40"
+    />
+  </div>
+
+  {/* Playback controls */}
+  <div className="flex items-center justify-between w-full mb-6">
+    <button
+      onClick={() => setIsShuffle(!isShuffle)}
+      disabled={!currentSong}
+      className={`transition-colors disabled:opacity-40 ${isShuffle ? "text-green-400" : "text-gray-400 hover:text-white"}`}
+    >
+      <span className="material-symbols-outlined text-2xl">shuffle</span>
+    </button>
+    <button onClick={prevSong} disabled={!currentSong} className="text-white hover:scale-110 transition-transform disabled:opacity-40">
+      <span className="material-symbols-outlined text-3xl">skip_previous</span>
+    </button>
+    <button
+      onClick={togglePlayPause}
+      disabled={!currentSong}
+      className="w-14 h-14 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-all glow-green disabled:opacity-40"
+    >
+      <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+        {isPlaying ? "pause" : "play_arrow"}
+      </span>
+    </button>
+    <button onClick={nextSong} disabled={!currentSong} className="text-white hover:scale-110 transition-transform disabled:opacity-40">
+      <span className="material-symbols-outlined text-3xl">skip_next</span>
+    </button>
+    <button
+      onClick={() => setIsRepeat(!isRepeat)}
+      disabled={!currentSong}
+      className={`transition-colors disabled:opacity-40 ${isRepeat ? "text-green-400" : "text-gray-400 hover:text-white"}`}
+    >
+      <span className="material-symbols-outlined text-2xl">repeat</span>
+    </button>
+  </div>
+
+  {/* Volume control */}
+  <div className="w-full flex items-center gap-3 px-2">
+    <button onClick={toggleMute} disabled={!currentSong} className="disabled:opacity-40">
+      <span className="material-symbols-outlined text-gray-400 text-sm">
+        {isMuted ? "volume_off" : "volume_down"}
+      </span>
+    </button>
+    <input
+      type="range"
+      min="0"
+      max="1"
+      step="0.01"
+      value={volume}
+      onChange={changeVolume}
+      disabled={!currentSong}
+      className="flex-1 h-1 accent-blue-400 drop-shadow-[0_0_8px_#3b82f6] cursor-pointer disabled:opacity-40"
+    />
+    <span className="material-symbols-outlined text-gray-400 text-sm">volume_up</span>
+  </div>
+</div>
+
+        {/* Audio uses currentSong.url — independent from playlist */}
+        <audio ref={audioRef} src={currentSong?.url} onEnded={handleEnd} />
       </main>
 
       {/* Right Playlist Panel — desktop only */}
