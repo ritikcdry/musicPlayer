@@ -169,43 +169,43 @@ const YouTubePlayer: React.FC = () => {
       <main className="flex-1 ml-0 md:ml-64 flex flex-col bg-gradient-to-b from-black to-gray-900 overflow-y-auto">
 
         {/* Search Bar */}
-        <header className="flex justify-between items-center px-6 py-3 w-full bg-black/90 backdrop-blur-xl sticky top-0 z-50 border-b border-white/10 shadow-lg">
-          <div className="flex-1 max-w-2xl flex items-center gap-4">
-            <div className="relative w-full flex items-center">
-              <input
-                className="w-full bg-white text-black pl-6 pr-12 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50 transition-all"
-                placeholder="Search for songs..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && search()}
-              />
-              <button
-                onClick={search}
-                className="absolute right-1.5 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-all active:scale-95 shadow-md glow-red"
-              >
-                <span className="material-symbols-outlined text-sm">search</span>
-              </button>
+        <header className="flex items-center px-6 py-3 w-full bg-black/90 backdrop-blur-xl sticky top-0 z-50 border-b border-white/10 shadow-lg">
+  <div className="flex-1 max-w-2xl">
+    <div className="relative flex items-center">
+      <input
+        className="w-full bg-white text-black pl-5 pr-10 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50 transition-all"
+        placeholder="Search for songs..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && search()}
+      />
+      <button
+        onClick={search}
+        className="absolute right-0 top-0 h-full aspect-square bg-red-600 text-white rounded-full hover:bg-red-700 transition-all active:scale-95 shadow-md glow-red flex items-center justify-center"
+      >
+        <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>search</span>
+      </button>
 
-              {showDropdown && results.length > 0 && (
-                <div className="absolute left-0 top-full mt-2 w-full bg-gray-900 border border-white/10 text-white rounded-2xl shadow-2xl z-50 max-h-60 overflow-y-auto">
-                  {results.map((item, i) => (
-                    <div
-                      key={i}
-                      onClick={() => play(item)}
-                      className="flex items-center gap-3 px-4 py-2 hover:bg-white/10 cursor-pointer"
-                    >
-                      <img
-                        src={item.snippet?.thumbnails?.default?.url || getRandomCover()}
-                        className="w-10 h-10 rounded-lg object-cover shrink-0"
-                      />
-                      <p className="text-sm truncate">{item.snippet.title}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+      {showDropdown && results.length > 0 && (
+        <div className="absolute left-0 top-full mt-2 w-full bg-gray-900 border border-white/10 text-white rounded-2xl shadow-2xl z-50 max-h-60 overflow-y-auto">
+          {results.map((item, i) => (
+            <div
+              key={i}
+              onClick={() => play(item)}
+              className="flex items-center gap-3 px-4 py-2 hover:bg-white/10 cursor-pointer"
+            >
+              <img
+                src={item.snippet?.thumbnails?.default?.url || getRandomCover()}
+                className="w-10 h-10 rounded-lg object-cover shrink-0"
+              />
+              <p className="text-sm truncate">{item.snippet.title}</p>
             </div>
-          </div>
-        </header>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</header>
 
         <div className="p-4 md:p-8 lg:p-12 space-y-10 pb-32 flex flex-col items-center">
 
