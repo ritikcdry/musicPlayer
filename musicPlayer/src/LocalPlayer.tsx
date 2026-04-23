@@ -34,6 +34,9 @@ const LocalPlayer: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
+  // Stores the currently playing song independently from the playlist
+  const [currentSong, setCurrentSong] = useState<Song | null>(null);
+
   // Controls mobile playlist drawer visibility
   const [showPlaylist, setShowPlaylist] = useState(false);
 
@@ -70,6 +73,7 @@ const LocalPlayer: React.FC = () => {
     const audio = audioRef.current;
     if (!audio || !songs.length) return;
     setCurrentIndex(index);
+    setCurrentSong(songs[index]);
     setTimeout(() => {
       audio.src = songs[index].url;
       audio.currentTime = 0;
@@ -98,13 +102,21 @@ const LocalPlayer: React.FC = () => {
     playSong((currentIndex - 1 + songs.length) % songs.length);
   };
 
-  // Removes a song from the playlist and handles edge cases for current index
+  // Removes song from playlist only — does not affect currently playing audio
   const deleteSong = (index: number) => {
     const updated = songs.filter((_, i) => i !== index);
     setSongs(updated);
-    if (!updated.length) { setCurrentIndex(0); setIsPlaying(false); return; }
-    if (index === currentIndex) { setCurrentIndex(0); setIsPlaying(false); }
-    else if (index < currentIndex) setCurrentIndex((p) => p - 1);
+
+    if (!updated.length) {
+      setCurrentIndex(0);
+      return;
+    }
+
+    if (index < currentIndex) {
+      setCurrentIndex((p) => p - 1);
+    } else if (index === currentIndex) {
+      setCurrentIndex(0);
+    }
   };
 
   // Updates progress slider and timer display as audio plays
