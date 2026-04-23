@@ -1,129 +1,271 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
-    <div className="bg-[#000000] bg-gradient-to-b from-[#000000] via-[#111827] to-[#000000] min-h-screen text-white overflow-x-hidden"
-      style={{ fontFamily: "'Be Vietnam Pro', sans-serif" }}>
-
-      {/* Google Fonts */}
+    <div
+      className="bg-[#080808] min-h-screen text-white overflow-x-hidden"
+      style={{ fontFamily: "'Be Vietnam Pro', sans-serif" }}
+    >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
-        .glass-card {
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.05);
+
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; }
+
+        /* Fade + slide up on mount */
+        .fade-up {
+          opacity: 0;
+          transform: translateY(20px);
+          transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        .glass-card:hover {
-          background: rgba(255, 255, 255, 0.12);
-          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        .fade-up.show {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.35s; }
+        .delay-4 { transition-delay: 0.5s; }
+
+        /* Card hover */
+        .player-card {
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.07);
+          transition: background 0.25s, border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+        }
+        .player-card:hover {
+          background: rgba(255,255,255,0.07);
+          border-color: rgba(255,255,255,0.14);
+          transform: translateY(-3px);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .player-card:active { transform: translateY(0) scale(0.98); }
+
+        /* Icon ring */
+        .icon-ring {
+          transition: background 0.25s, box-shadow 0.25s;
+        }
+        .player-card:hover .icon-ring {
+          box-shadow: 0 0 0 6px rgba(255,255,255,0.04);
+        }
+
+        /* Arrow */
+        .arrow-icon {
+          opacity: 0;
+          transform: translateX(-6px);
+          transition: opacity 0.2s, transform 0.2s;
+        }
+        .player-card:hover .arrow-icon {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        /* Subtle noise texture overlay */
+        .noise::after {
+          content: '';
+          position: fixed;
+          inset: 0;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        /* Glow orbs */
+        .orb {
+          position: fixed;
+          border-radius: 50%;
+          filter: blur(100px);
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        /* Nav link */
+        .nav-link {
+          position: relative;
+          color: rgba(255,255,255,0.45);
+          transition: color 0.2s;
+        }
+        .nav-link:hover { color: rgba(255,255,255,0.9); }
+        .nav-link.active { color: #fff; }
+        .nav-link.active::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0; right: 0;
+          height: 1.5px;
+          background: white;
+          border-radius: 99px;
+        }
+
+        /* Mobile nav active dot */
+        .mob-active { color: white; }
+        .mob-active .mob-dot {
+          width: 4px; height: 4px;
+          background: white;
+          border-radius: 50%;
+          margin: 2px auto 0;
         }
       `}</style>
 
-      {/* Top Navigation */}
-      <header className="fixed top-0 w-full z-50 bg-white/10 backdrop-blur-xl border-b border-white/5 flex justify-between items-center px-8 py-4">
-        <div className="text-2xl font-bold tracking-tight text-white">Aura Music</div>
+      {/* Background orbs */}
+      <div className="orb w-96 h-96 bg-white/[0.03] top-[-100px] left-[-100px]" />
+      <div className="orb w-80 h-80 bg-white/[0.02] bottom-[-80px] right-[-80px]" />
 
-        <div className="hidden md:flex gap-8 items-center">
-          <nav className="flex gap-6">
-            <a className="text-white border-b-2 border-white font-medium py-1 transition-all duration-300" href="#">Home</a>
-            <a className="text-white/60 hover:bg-white/10 font-medium py-1 rounded transition-all duration-300 px-2" href="#">Explore</a>
-            <a className="text-white/60 hover:bg-white/10 font-medium py-1 rounded transition-all duration-300 px-2" href="#">Library</a>
-          </nav>
-          <div className="flex items-center gap-4">
-            <span className="material-symbols-outlined text-white cursor-pointer hover:bg-white/10 p-2 rounded-full transition-all">search</span>
-            <span className="material-symbols-outlined text-white cursor-pointer hover:bg-white/10 p-2 rounded-full transition-all">account_circle</span>
-            <span className="material-symbols-outlined text-white cursor-pointer hover:bg-white/10 p-2 rounded-full transition-all">settings</span>
+      {/* ── Navigation ── */}
+      <header className="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-2xl border-b border-white/[0.06]">
+        <div className="max-w-5xl mx-auto flex justify-between items-center px-5 sm:px-8 h-14">
+
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
+              <span className="material-symbols-outlined text-sm text-white" style={{ fontVariationSettings: "'FILL' 1" }}>music_note</span>
+            </div>
+            <span className="text-sm font-bold tracking-tight text-white">Aura Music</span>
           </div>
+
+          {/* Desktop nav links */}
+          <nav className="hidden md:flex items-center gap-7 text-sm font-medium">
+            <a className="nav-link active cursor-pointer">Home</a>
+            <a className="nav-link cursor-pointer">Explore</a>
+            <a className="nav-link cursor-pointer">Library</a>
+          </nav>
+
+          {/* Desktop icons */}
+          <div className="hidden md:flex items-center gap-1">
+            {["search", "account_circle", "settings"].map((icon) => (
+              <button key={icon}
+                className="w-8 h-8 flex items-center justify-center rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all">
+                <span className="material-symbols-outlined text-base">{icon}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile — search icon only */}
+          <button className="md:hidden w-8 h-8 flex items-center justify-center rounded-lg text-white/40 hover:text-white">
+            <span className="material-symbols-outlined text-base">search</span>
+          </button>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="min-h-screen flex flex-col items-center justify-center px-8 py-20">
+      {/* ── Hero ── */}
+      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 pt-20 pb-28 md:pb-16">
 
-        {/* Title */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-extrabold text-white mb-4">🎵 Aura Music</h1>
-          <p className="text-sm font-medium text-gray-400 max-w-md mx-auto">
-            Elevate your auditory experience with seamless local playback and global streaming.
+        {/* Badge */}
+        <div className={`fade-up delay-1 ${mounted ? "show" : ""} mb-6`}>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/6 border border-white/10 text-white/50 text-xs font-medium tracking-wide">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            Now streaming
+          </span>
+        </div>
+
+        {/* Headline */}
+        <div className={`fade-up delay-2 ${mounted ? "show" : ""} text-center mb-4`}>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight tracking-tight">
+            Your music,<br />
+            <span className="text-white/40">your way.</span>
+          </h1>
+        </div>
+
+        {/* Subheadline */}
+        <div className={`fade-up delay-3 ${mounted ? "show" : ""} text-center mb-12`}>
+          <p className="text-sm sm:text-base text-white/35 max-w-sm mx-auto leading-relaxed">
+            Play local files or stream from YouTube — seamlessly, beautifully.
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="flex flex-col md:flex-row gap-6 items-center justify-center w-full max-w-4xl">
+        {/* ── Cards ── */}
+        <div className={`fade-up delay-4 ${mounted ? "show" : ""} w-full max-w-2xl`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
 
-          {/* Local Player Card */}
-          <div
-            onClick={() => navigate("/local")}
-            className="glass-card group w-full md:w-64 p-8 rounded-xl cursor-pointer transition-all duration-300 active:scale-95 flex flex-col items-center text-center"
-          >
-            <div className="mb-6 w-16 h-16 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors duration-300">
-              <span className="material-symbols-outlined text-4xl text-white">headphones</span>
+            {/* Local Player */}
+            <div
+              onClick={() => navigate("/local")}
+              className="player-card rounded-2xl p-6 cursor-pointer group"
+            >
+              <div className="flex items-start justify-between mb-8">
+                <div className="icon-ring w-11 h-11 rounded-xl bg-white/8 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-xl text-white/70"
+                    style={{ fontVariationSettings: "'FILL' 1" }}>headphones</span>
+                </div>
+                <span className="arrow-icon material-symbols-outlined text-white/40 text-base mt-1">arrow_outward</span>
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white mb-1">Local Player</h3>
+                <p className="text-xs text-white/35 leading-relaxed">Play your downloaded songs from device storage.</p>
+              </div>
+              <div className="mt-5 flex items-center gap-1.5">
+                <span className="text-[10px] font-semibold text-white/25 uppercase tracking-widest">Upload & play</span>
+                <span className="material-symbols-outlined text-white/20 text-xs">chevron_right</span>
+              </div>
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">Local Player</h3>
-            <p className="text-sm text-gray-400">Play your downloaded songs</p>
-            <div className="mt-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              {/* Navigates to local player on click */}
-              <button className="bg-white text-black px-6 py-2 rounded-full text-xs font-semibold uppercase tracking-widest">
-                Upload songs
-              </button>
+
+            {/* YouTube Player */}
+            <div
+              onClick={() => navigate("/youtube")}
+              className="player-card rounded-2xl p-6 cursor-pointer group"
+            >
+              <div className="flex items-start justify-between mb-8">
+                <div className="icon-ring w-11 h-11 rounded-xl bg-white/8 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-xl text-white/70"
+                    style={{ fontVariationSettings: "'FILL' 1" }}>play_circle</span>
+                </div>
+                <span className="arrow-icon material-symbols-outlined text-white/40 text-base mt-1">arrow_outward</span>
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white mb-1">YouTube Player</h3>
+                <p className="text-xs text-white/35 leading-relaxed">Search and stream any song directly from YouTube.</p>
+              </div>
+              <div className="mt-5 flex items-center gap-1.5">
+                <span className="text-[10px] font-semibold text-white/25 uppercase tracking-widest">Start streaming</span>
+                <span className="material-symbols-outlined text-white/20 text-xs">chevron_right</span>
+              </div>
             </div>
+
           </div>
 
-          {/* YouTube Player Card */}
-          <div
-            onClick={() => navigate("/youtube")}
-            className="glass-card group w-full md:w-64 p-8 rounded-xl cursor-pointer transition-all duration-300 active:scale-95 flex flex-col items-center text-center"
-          >
-            <div className="mb-6 w-16 h-16 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors duration-300">
-              <span className="material-symbols-outlined text-4xl text-white" style={{ fontVariationSettings: "'FILL' 1" }}>play_circle</span>
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-2">YouTube Player</h3>
-            <p className="text-sm text-gray-400">Search &amp; stream music from YouTube </p>
-            <div className="mt-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              {/* Navigates to YouTube player on click */}
-              <button className="bg-white text-black px-6 py-2 rounded-full text-xs font-semibold uppercase tracking-widest">
-                Start Streaming
-              </button>
-            </div>
-          </div>
-
+          {/* Bottom hint */}
+          <p className="text-center text-white/20 text-xs mt-6 tracking-wide">
+            Tap a card to get started
+          </p>
         </div>
+
       </main>
 
-      {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 bg-zinc-950/80 backdrop-blur-[30px] border-t border-white/10 shadow-[0_-4px_20px_rgba(255,255,255,0.05)] h-20">
+      {/* ── Mobile Bottom Nav ── */}
+      <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-2 bg-black/90 backdrop-blur-2xl border-t border-white/[0.06]">
 
-        {/* Home tab — active */}
-        <div className="flex flex-col items-center justify-center text-white font-bold py-2">
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>home</span>
-          <span className="text-[12px] uppercase tracking-widest mt-1">Home</span>
+        <div className="mob-active flex flex-col items-center justify-center py-2 px-4">
+          <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>home</span>
+          <div className="mob-dot" />
         </div>
 
-        {/* Search tab */}
-        <div className="flex flex-col items-center justify-center text-white/40 py-2 hover:text-white/80 transition-colors">
-          <span className="material-symbols-outlined">search</span>
-          <span className="text-[12px] uppercase tracking-widest mt-1">Search</span>
+        <div className="flex flex-col items-center justify-center py-2 px-4 text-white/30">
+          <span className="material-symbols-outlined text-xl">search</span>
+          <div className="w-1 h-1 mt-1 opacity-0" />
         </div>
 
-        {/* Library tab — navigates to local player */}
         <div
           onClick={() => navigate("/local")}
-          className="flex flex-col items-center justify-center text-white/40 py-2 hover:text-white/80 transition-colors cursor-pointer"
+          className="flex flex-col items-center justify-center py-2 px-4 text-white/30 cursor-pointer"
         >
-          <span className="material-symbols-outlined">library_music</span>
-          <span className="text-[12px] uppercase tracking-widest mt-1">Library</span>
+          <span className="material-symbols-outlined text-xl">headphones</span>
+          <div className="w-1 h-1 mt-1 opacity-0" />
         </div>
 
-        {/* YouTube tab — navigates to YouTube player */}
         <div
           onClick={() => navigate("/youtube")}
-          className="flex flex-col items-center justify-center text-white/40 py-2 hover:text-white/80 transition-colors cursor-pointer"
+          className="flex flex-col items-center justify-center py-2 px-4 text-white/30 cursor-pointer"
         >
-          <span className="material-symbols-outlined">play_circle</span>
-          <span className="text-[12px] uppercase tracking-widest mt-1">YouTube</span>
+          <span className="material-symbols-outlined text-xl">play_circle</span>
+          <div className="w-1 h-1 mt-1 opacity-0" />
         </div>
 
       </nav>
