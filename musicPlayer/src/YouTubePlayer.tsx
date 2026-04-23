@@ -5,10 +5,8 @@ import useYoutubeDownload from "./hooks/useYoutubeDownload";
 
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 
-// Returns a random placeholder image for songs with no thumbnail
 const getRandomCover = () => `https://picsum.photos/200?random=${Math.floor(Math.random() * 1000)}`;
 
-// Formats seconds into mm:ss display format
 const formatTime = (seconds: number): string => {
   if (isNaN(seconds) || seconds === 0) return "0:00";
   const m = Math.floor(seconds / 60);
@@ -31,7 +29,6 @@ const YouTubePlayer: React.FC = () => {
   const [volume, setVolume] = useState(100);
   const [isMuted, setIsMuted] = useState(false);
 
-  // Tracks current time and duration for the timer display
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -41,7 +38,6 @@ const YouTubePlayer: React.FC = () => {
   const { loading: downloading, error: downloadError, downloadAudio } = useYoutubeDownload();
   const playerRef = useRef<any>(null);
 
-  // Searches YouTube for videos matching the query
   const search = async () => {
     if (!query.trim()) return;
     const res = await fetch(
@@ -52,7 +48,6 @@ const YouTubePlayer: React.FC = () => {
     setShowDropdown(true);
   };
 
-  // Plays the selected video and saves it to history with thumbnail
   const play = (item: any) => {
     const id = item?.id?.videoId;
     const title = item?.snippet?.title ?? "";
@@ -70,14 +65,12 @@ const YouTubePlayer: React.FC = () => {
     setDuration(0);
   };
 
-  // Removes a single item from history by index
   const deleteHistory = (i: number) => {
     setHistory((prev) => prev.filter((_, index) => index !== i));
   };
 
   const clearHistory = () => setHistory([]);
 
-  // Toggles between play and pause on the YouTube player
   const togglePlay = () => {
     if (!playerRef.current) return;
     if (isPlaying) playerRef.current.pauseVideo();
@@ -85,7 +78,6 @@ const YouTubePlayer: React.FC = () => {
     setIsPlaying(!isPlaying);
   };
 
-  // Seeks the video to the position matching the slider value
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     setProgress(value);
@@ -93,14 +85,12 @@ const YouTubePlayer: React.FC = () => {
     if (dur) playerRef.current.seekTo((value / 100) * dur);
   };
 
-  // Updates the player volume from the slider
   const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     setVolume(value);
     playerRef.current?.setVolume(value);
   };
 
-  // Toggles mute/unmute on the YouTube player
   const toggleMute = () => {
     if (!playerRef.current) return;
     isMuted ? playerRef.current.unMute() : playerRef.current.mute();
@@ -113,7 +103,6 @@ const YouTubePlayer: React.FC = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Tracks playback progress and current time every 500ms
   useEffect(() => {
     const interval = setInterval(() => {
       if (playerRef.current) {
@@ -151,7 +140,7 @@ const YouTubePlayer: React.FC = () => {
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(34,197,94,0.3); border-radius: 10px; }
       `}</style>
 
-      {/* Left Sidebar — hidden on mobile */}
+      {/* Left Sidebar */}
       <aside className="fixed left-0 top-0 h-full flex-col p-4 bg-gray-950 w-64 border-r border-white/5 hidden md:flex z-40">
         <div className="mb-10 px-4">
           <span className="text-lg font-black text-green-500">YouTube Player 🎧</span>
@@ -176,10 +165,10 @@ const YouTubePlayer: React.FC = () => {
         </nav>
       </aside>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <main className="flex-1 ml-0 md:ml-64 flex flex-col bg-gradient-to-b from-black to-gray-900 overflow-y-auto">
 
-        {/* Top Search Bar */}
+        {/* Search Bar */}
         <header className="flex justify-between items-center px-6 py-3 w-full bg-black/90 backdrop-blur-xl sticky top-0 z-50 border-b border-white/10 shadow-lg">
           <div className="flex-1 max-w-2xl flex items-center gap-4">
             <div className="relative w-full flex items-center">
@@ -197,7 +186,6 @@ const YouTubePlayer: React.FC = () => {
                 <span className="material-symbols-outlined text-sm">search</span>
               </button>
 
-              {/* Search results dropdown */}
               {showDropdown && results.length > 0 && (
                 <div className="absolute left-0 top-full mt-2 w-full bg-gray-900 border border-white/10 text-white rounded-2xl shadow-2xl z-50 max-h-60 overflow-y-auto">
                   {results.map((item, i) => (
@@ -221,11 +209,11 @@ const YouTubePlayer: React.FC = () => {
 
         <div className="p-4 md:p-8 lg:p-12 space-y-10 pb-32 flex flex-col items-center">
 
-          {/* Music Player Card */}
+          {/* Player Card */}
           <section className="w-full max-w-5xl">
             <div className="glass-card rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 md:gap-10 shadow-2xl overflow-hidden">
 
-              {/* Album art */}
+              {/* Album Art */}
               <div className="relative shrink-0">
                 {currentThumbnail ? (
                   <img
@@ -240,7 +228,7 @@ const YouTubePlayer: React.FC = () => {
                 )}
               </div>
 
-              {/* Player controls — flex-1 + min-w-0 keeps it from overflowing */}
+              {/* Controls — min-w-0 prevents overflow */}
               <div className="flex-1 min-w-0 w-full space-y-4">
 
                 {/* Title */}
@@ -267,7 +255,7 @@ const YouTubePlayer: React.FC = () => {
                   />
                 )}
 
-                {/* Progress slider */}
+                {/* Progress Slider */}
                 <div className="space-y-1 w-full">
                   <input
                     type="range"
@@ -284,9 +272,8 @@ const YouTubePlayer: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Prev / Play-Pause / Next */}
+                {/* Prev / Play / Next */}
                 <div className="flex items-center gap-4 justify-center">
-                  {/* Previous — no functionality */}
                   <button
                     disabled={!videoId}
                     className="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all disabled:opacity-40"
@@ -294,7 +281,6 @@ const YouTubePlayer: React.FC = () => {
                     <span className="material-symbols-outlined text-2xl">skip_previous</span>
                   </button>
 
-                  {/* Play / Pause */}
                   <button
                     onClick={togglePlay}
                     disabled={!videoId}
@@ -308,7 +294,6 @@ const YouTubePlayer: React.FC = () => {
                     </span>
                   </button>
 
-                  {/* Next — no functionality */}
                   <button
                     disabled={!videoId}
                     className="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all disabled:opacity-40"
@@ -317,7 +302,7 @@ const YouTubePlayer: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Volume slider */}
+                {/* Volume */}
                 <div className="flex items-center gap-3 w-full">
                   <button
                     onClick={toggleMute}
@@ -339,7 +324,7 @@ const YouTubePlayer: React.FC = () => {
                   />
                 </div>
 
-                {/* Download MP3 button — full width */}
+                {/* Download Button — full width */}
                 <button
                   onClick={() => videoId && downloadAudio(videoId, currentTitle)}
                   disabled={downloading || !videoId}
@@ -349,7 +334,6 @@ const YouTubePlayer: React.FC = () => {
                   <span>{downloading ? "Downloading..." : "Download MP3"}</span>
                 </button>
 
-                {/* Download error message */}
                 {downloadError && (
                   <p className="text-red-400 text-xs">{downloadError}</p>
                 )}
@@ -388,7 +372,7 @@ const YouTubePlayer: React.FC = () => {
                       <p className="text-sm font-bold text-white truncate">{item.snippet.title}</p>
                       <p className="text-[10px] text-white/40 truncate">{item.snippet.channelTitle}</p>
                     </div>
-                    {/* Only delete button — no download */}
+                    {/* Delete only — no download */}
                     <button
                       onClick={() => deleteHistory(i)}
                       className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
@@ -404,7 +388,7 @@ const YouTubePlayer: React.FC = () => {
         </div>
       </main>
 
-      {/* Mobile Bottom Navigation */}
+      {/* Mobile Bottom Nav */}
       <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center h-16 md:hidden px-4 bg-black/80 backdrop-blur-2xl rounded-t-2xl border-t border-white/10 shadow-[0_-4px_20px_rgba(34,197,94,0.15)] z-50">
         <a
           onClick={() => navigate("/")}
@@ -426,7 +410,7 @@ const YouTubePlayer: React.FC = () => {
         </a>
       </nav>
 
-      {/* Mobile history drawer */}
+      {/* Mobile History Drawer */}
       {showHistory && (
         <div className="fixed inset-0 z-50 bg-black/80 md:hidden flex flex-col justify-end">
           <div className="bg-gray-900 rounded-t-2xl p-4 max-h-[70vh] overflow-y-auto">
@@ -451,7 +435,7 @@ const YouTubePlayer: React.FC = () => {
                 >
                   <p className="text-sm font-bold text-white truncate">{item.snippet.title}</p>
                 </div>
-                {/* Only delete — no download in mobile history either */}
+                {/* Delete only */}
                 <button onClick={() => deleteHistory(i)} className="text-red-400 p-1.5">
                   <span className="material-symbols-outlined text-sm">delete</span>
                 </button>
