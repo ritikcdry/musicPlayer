@@ -249,7 +249,7 @@ const LocalPlayer: React.FC = () => {
           {currentSong ? (
             <img
             src={currentSong.cover}
-            className="w-full h-full object-cover rounded-3xl shadow-2xl border border-white/10 transform transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover rounded-3xl shadow-2xl border border-white/10"
             />
           ) : (
           <div className="w-full h-full rounded-3xl border border-white/10 bg-white/5 flex flex-col items-center justify-center gap-3">
