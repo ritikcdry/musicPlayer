@@ -107,13 +107,11 @@ const YouTubePlayer: React.FC = () => {
     setIsMuted(!isMuted);
   };
 
-  // 
   useEffect(() => {
-  const handleClickOutside = () => setShowDropdown(false);
-  document.addEventListener("click", handleClickOutside);
-  return () => document.removeEventListener("click", handleClickOutside);
-}, []);
-
+    const handleClickOutside = () => setShowDropdown(false);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   // Tracks playback progress and current time every 500ms
   useEffect(() => {
@@ -160,7 +158,6 @@ const YouTubePlayer: React.FC = () => {
           <p className="text-xs text-white/40 mt-1">YouTube Collection</p>
         </div>
         <nav className="flex-1 space-y-2">
-          {/* Navigates back to the home page */}
           <a
             onClick={() => navigate("/")}
             className="flex items-center gap-4 px-4 py-3 rounded-xl text-green-500 font-bold border-r-2 border-green-500 bg-green-500/5 transition-colors duration-300 cursor-pointer"
@@ -226,30 +223,30 @@ const YouTubePlayer: React.FC = () => {
 
           {/* Music Player Card */}
           <section className="w-full max-w-5xl">
-            <div className="glass-card rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 md:gap-10 shadow-2xl">
+            <div className="glass-card rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 md:gap-10 shadow-2xl overflow-hidden">
 
-              {/* Album art — blank placeholder until a song is played */}
+              {/* Album art */}
               <div className="relative shrink-0">
                 {currentThumbnail ? (
-                  // Shows YouTube thumbnail once a song is selected
                   <img
                     src={currentThumbnail}
-                    className="w-52 h-52 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-2xl object-cover shadow-2xl"
+                    className="w-52 h-52 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-2xl object-cover shadow-2xl"
                   />
                 ) : (
-                  // Blank placeholder shown before any song is played
-                  <div className="w-52 h-52 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-2xl bg-white/5 border border-white/10 flex flex-col items-center justify-center gap-3">
+                  <div className="w-52 h-52 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-2xl bg-white/5 border border-white/10 flex flex-col items-center justify-center gap-3">
                     <span className="material-symbols-outlined text-6xl text-gray-600">music_note</span>
                     <p className="text-gray-500 text-sm text-center px-4">Search a song to start</p>
                   </div>
                 )}
               </div>
 
-              {/* Player controls */}
-              <div className="flex-1 w-full space-y-6">
+              {/* Player controls — flex-1 + min-w-0 keeps it from overflowing */}
+              <div className="flex-1 min-w-0 w-full space-y-4">
+
+                {/* Title */}
                 <div>
-                  <span className="text-green-400 font-bold tracking-widest text-xs uppercase mb-2 block">Now Playing</span>
-                  <h1 className="text-2xl md:text-3xl font-black text-white mb-2 truncate">
+                  <span className="text-green-400 font-bold tracking-widest text-xs uppercase mb-1 block">Now Playing</span>
+                  <h1 className="text-xl md:text-2xl font-black text-white mb-1 truncate w-full">
                     {currentTitle || "No song selected"}
                   </h1>
                   <p className="text-white/60 text-sm">
@@ -270,86 +267,97 @@ const YouTubePlayer: React.FC = () => {
                   />
                 )}
 
-                <div className="space-y-5">
-
-                  {/* Play/Pause button */}
-                  <div className="flex items-center gap-6 justify-center">
-                    <button
-                      onClick={togglePlay}
-                      disabled={!videoId}
-                      className="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg glow-green active:scale-95 transition-all disabled:opacity-40"
-                    >
-                      <span
-                        className="material-symbols-outlined text-black text-4xl"
-                        style={{ fontVariationSettings: "'FILL' 1" }}
-                      >
-                        {isPlaying ? "pause" : "play_arrow"}
-                      </span>
-                    </button>
+                {/* Progress slider */}
+                <div className="space-y-1 w-full">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={progress}
+                    onChange={handleSeek}
+                    disabled={!videoId}
+                    className="w-full h-1.5 accent-green-400 drop-shadow-[0_0_10px_#22c55e] cursor-pointer disabled:opacity-40"
+                  />
+                  <div className="flex justify-between text-[10px] text-white/40 font-mono">
+                    <span>{formatTime(currentTime)}</span>
+                    <span>{formatTime(duration)}</span>
                   </div>
-
-                  {/* Progress slider with current time and duration timer */}
-                  <div className="space-y-1">
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={progress}
-                      onChange={handleSeek}
-                      disabled={!videoId}
-                      className="w-full h-1.5 accent-green-400 drop-shadow-[0_0_10px_#22c55e] cursor-pointer disabled:opacity-40"
-                    />
-                    <div className="flex justify-between text-[10px] text-white/40 font-mono">
-                      <span>{formatTime(currentTime)}</span>
-                      <span>{formatTime(duration)}</span>
-                    </div>
-                  </div>
-
-                  {/* Volume slider + Download button row */}
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3 flex-1">
-                      {/* Mute/unmute toggle button */}
-                      <button
-                        onClick={toggleMute}
-                        disabled={!videoId}
-                        className="disabled:opacity-40"
-                      >
-                        <span className="material-symbols-outlined text-white/60 text-sm">
-                          {isMuted ? "volume_off" : "volume_up"}
-                        </span>
-                      </button>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={volume}
-                        onChange={handleVolume}
-                        disabled={!videoId}
-                        className="flex-1 h-1 accent-blue-400 drop-shadow-[0_0_8px_#3b82f6] cursor-pointer disabled:opacity-40"
-                      />
-                    </div>
-
-                    {/* Download MP3 button */}
-                    <button
-                      onClick={() => videoId && downloadAudio(videoId, currentTitle)}
-                      disabled={downloading || !videoId}
-                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-400 to-green-600 text-black font-bold rounded-xl active:scale-95 transition-all shadow-lg glow-green disabled:opacity-40 text-sm whitespace-nowrap"
-                    >
-                      <span className="material-symbols-outlined text-sm">download</span>
-                      <span>{downloading ? "Downloading..." : "Download MP3"}</span>
-                    </button>
-                  </div>
-
-                  {/* Download error message */}
-                  {downloadError && (
-                    <p className="text-red-400 text-xs">{downloadError}</p>
-                  )}
                 </div>
+
+                {/* Prev / Play-Pause / Next */}
+                <div className="flex items-center gap-4 justify-center">
+                  {/* Previous — no functionality */}
+                  <button
+                    disabled={!videoId}
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all disabled:opacity-40"
+                  >
+                    <span className="material-symbols-outlined text-2xl">skip_previous</span>
+                  </button>
+
+                  {/* Play / Pause */}
+                  <button
+                    onClick={togglePlay}
+                    disabled={!videoId}
+                    className="w-14 h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg glow-green active:scale-95 transition-all disabled:opacity-40"
+                  >
+                    <span
+                      className="material-symbols-outlined text-black text-3xl"
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                    >
+                      {isPlaying ? "pause" : "play_arrow"}
+                    </span>
+                  </button>
+
+                  {/* Next — no functionality */}
+                  <button
+                    disabled={!videoId}
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all disabled:opacity-40"
+                  >
+                    <span className="material-symbols-outlined text-2xl">skip_next</span>
+                  </button>
+                </div>
+
+                {/* Volume slider */}
+                <div className="flex items-center gap-3 w-full">
+                  <button
+                    onClick={toggleMute}
+                    disabled={!videoId}
+                    className="shrink-0 disabled:opacity-40"
+                  >
+                    <span className="material-symbols-outlined text-white/60 text-sm">
+                      {isMuted ? "volume_off" : "volume_up"}
+                    </span>
+                  </button>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={volume}
+                    onChange={handleVolume}
+                    disabled={!videoId}
+                    className="flex-1 h-1 accent-blue-400 drop-shadow-[0_0_8px_#3b82f6] cursor-pointer disabled:opacity-40"
+                  />
+                </div>
+
+                {/* Download MP3 button — full width */}
+                <button
+                  onClick={() => videoId && downloadAudio(videoId, currentTitle)}
+                  disabled={downloading || !videoId}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-400 to-green-600 text-black font-bold rounded-xl active:scale-95 transition-all shadow-lg glow-green disabled:opacity-40 text-sm"
+                >
+                  <span className="material-symbols-outlined text-sm">download</span>
+                  <span>{downloading ? "Downloading..." : "Download MP3"}</span>
+                </button>
+
+                {/* Download error message */}
+                {downloadError && (
+                  <p className="text-red-400 text-xs">{downloadError}</p>
+                )}
               </div>
             </div>
           </section>
 
-          {/* History Panel — centered below player */}
+          {/* History Panel */}
           <section className="w-full max-w-5xl">
             <div className="bg-black/60 rounded-3xl p-6 border border-white/5 flex flex-col max-h-[400px]">
               <div className="flex items-center justify-between mb-6">
@@ -371,7 +379,6 @@ const YouTubePlayer: React.FC = () => {
                     key={i}
                     className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group cursor-pointer"
                   >
-                    {/* Clicking thumbnail or title replays the song */}
                     <img
                       onClick={() => play(item)}
                       src={item.snippet?.thumbnails?.default?.url || getRandomCover()}
@@ -381,22 +388,13 @@ const YouTubePlayer: React.FC = () => {
                       <p className="text-sm font-bold text-white truncate">{item.snippet.title}</p>
                       <p className="text-[10px] text-white/40 truncate">{item.snippet.channelTitle}</p>
                     </div>
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {/* Download button for individual history item */}
-                      <button
-                        onClick={() => downloadAudio(item.id.videoId, item.snippet.title)}
-                        className="p-1.5 text-green-400 hover:bg-green-500/10 rounded-lg"
-                      >
-                        <span className="material-symbols-outlined text-sm">download</span>
-                      </button>
-                      {/* Delete button for individual history item */}
-                      <button
-                        onClick={() => deleteHistory(i)}
-                        className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg"
-                      >
-                        <span className="material-symbols-outlined text-sm">delete</span>
-                      </button>
-                    </div>
+                    {/* Only delete button — no download */}
+                    <button
+                      onClick={() => deleteHistory(i)}
+                      className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <span className="material-symbols-outlined text-sm">delete</span>
+                    </button>
                   </div>
                 ))}
               </div>
@@ -419,7 +417,6 @@ const YouTubePlayer: React.FC = () => {
           <span className="material-symbols-outlined">search</span>
           <span className="text-[10px] font-medium">Search</span>
         </a>
-        {/* Opens mobile history drawer */}
         <a
           onClick={() => setShowHistory(true)}
           className="flex flex-col items-center justify-center text-white/40 cursor-pointer"
@@ -429,7 +426,7 @@ const YouTubePlayer: React.FC = () => {
         </a>
       </nav>
 
-      {/* Mobile history drawer — slides up from bottom */}
+      {/* Mobile history drawer */}
       {showHistory && (
         <div className="fixed inset-0 z-50 bg-black/80 md:hidden flex flex-col justify-end">
           <div className="bg-gray-900 rounded-t-2xl p-4 max-h-[70vh] overflow-y-auto">
@@ -437,7 +434,6 @@ const YouTubePlayer: React.FC = () => {
               <h3 className="text-green-400 font-bold">History</h3>
               <div className="flex gap-3">
                 <button onClick={clearHistory} className="text-red-400 text-sm">Clear</button>
-                {/* Closes the mobile history drawer */}
                 <button onClick={() => setShowHistory(false)} className="text-gray-400 text-sm">✕ Close</button>
               </div>
             </div>
@@ -455,12 +451,7 @@ const YouTubePlayer: React.FC = () => {
                 >
                   <p className="text-sm font-bold text-white truncate">{item.snippet.title}</p>
                 </div>
-                <button
-                  onClick={() => downloadAudio(item.id.videoId, item.snippet.title)}
-                  className="text-green-400 p-1.5"
-                >
-                  <span className="material-symbols-outlined text-sm">download</span>
-                </button>
+                {/* Only delete — no download in mobile history either */}
                 <button onClick={() => deleteHistory(i)} className="text-red-400 p-1.5">
                   <span className="material-symbols-outlined text-sm">delete</span>
                 </button>
