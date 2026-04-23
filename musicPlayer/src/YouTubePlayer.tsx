@@ -173,8 +173,8 @@ const YouTubePlayer: React.FC = () => {
           <div className="flex-1 max-w-2xl flex items-center gap-4">
             <div className="relative w-full flex items-center">
               <input
-                className="w-full bg-white text-black px-6 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50 transition-all"
-                placeholder="Search for tracks, artists, or albums..."
+                className="w-full bg-white text-black pl-6 pr-12 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50 transition-all"
+                placeholder="Search for songs..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && search()}
