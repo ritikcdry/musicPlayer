@@ -207,10 +207,13 @@ const YouTubePlayer: React.FC = () => {
           <p className="text-xs text-white/30 mt-1">Your Collection</p>
         </div>
         <nav className="flex-1 space-y-1">
-          <a onClick={() => navigate("/")}
-            className="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-green-400 font-semibold bg-green-500/10 border-r-2 border-green-500 cursor-pointer">
-            <span className="material-symbols-outlined">home</span><span>Home</span>
-          </a>
+          <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-green-400 bg-green-500/10 font-semibold text-[13px] w-full text-left transition-all hover:text-white hover:bg-white/8"
+          >
+          <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>home</span>
+          Home
+          </button>
           <a className="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-white/40 cursor-pointer">
             <span className="material-symbols-outlined">explore</span><span>Explore</span>
           </a>
