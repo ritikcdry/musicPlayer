@@ -249,7 +249,7 @@ const YouTubePlayer: React.FC = () => {
               <div className="flex-1 w-full space-y-6 min-w-0">
                 <div>
                   <span className="text-green-400 font-bold tracking-widest text-xs uppercase mb-2 block">Now Playing</span>
-                  <h1 className="text-2xl md:text-3xl font-black text-white mb-2 truncate w-full">
+                  <h1 className="text-2xl md:text-3xl font-black text-white mb-2 line-clamp-2">
                     {currentTitle || "No song selected"}
                   </h1>
                   <p className="text-white/60 text-sm">
@@ -297,7 +297,7 @@ const YouTubePlayer: React.FC = () => {
                       value={progress}
                       onChange={handleSeek}
                       disabled={!videoId}
-                      className="w-full h-1.5 accent-green-400 drop-shadow-[0_0_10px_#22c55e] cursor-pointer disabled:opacity-40"
+                      className="w-full min-w-0 h-1.5 accent-green-400 cursor-pointer disabled:opacity-40"
                     />
                     <div className="flex justify-between text-[10px] text-white/40 font-mono">
                       <span>{formatTime(currentTime)}</span>
@@ -306,13 +306,13 @@ const YouTubePlayer: React.FC = () => {
                   </div>
 
                   {/* Volume slider + Download button row */}
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3 flex-1">
+                  <div className="flex flex-col md:flex-row items-center gap-4">
+                    <div className="flex items-center gap-3 w-full md:flex-1 min-w-0">
                       {/* Mute/unmute toggle button */}
                       <button
                         onClick={toggleMute}
                         disabled={!videoId}
-                        className="disabled:opacity-40"
+                        className="disabled:opacity-40 shrink-0"
                       >
                         <span className="material-symbols-outlined text-white/60 text-sm">
                           {isMuted ? "volume_off" : "volume_up"}
@@ -333,10 +333,10 @@ const YouTubePlayer: React.FC = () => {
                     <button
                       onClick={() => videoId && downloadAudio(videoId, currentTitle)}
                       disabled={downloading || !videoId}
-                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-400 to-green-600 text-black font-bold rounded-xl active:scale-95 transition-all shadow-lg glow-green disabled:opacity-40 text-sm whitespace-nowrap"
+                      className="w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-400 to-green-600 text-black font-bold rounded-xl active:scale-95 transition-all shadow-lg disabled:opacity-40 text-sm whitespace-nowrap shrink-0"
                     >
                       <span className="material-symbols-outlined text-sm">download</span>
-                      <span>{downloading ? "Downloading..." : "Download MP3"}</span>
+                      <span className="truncate">{downloading ? "Downloading..." : "Download MP3"}</span>
                     </button>
                   </div>
 
