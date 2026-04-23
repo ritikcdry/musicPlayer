@@ -107,6 +107,14 @@ const YouTubePlayer: React.FC = () => {
     setIsMuted(!isMuted);
   };
 
+  // Closes the search results dropdown when clicking outside of it
+  useEffect(() => {
+  const handleClickOutside = () => setShowDropdown(false);
+  document.addEventListener("click", handleClickOutside);
+  return () => document.removeEventListener("click", handleClickOutside);
+}, []);
+
+
   // Tracks playback progress and current time every 500ms
   useEffect(() => {
     const interval = setInterval(() => {
@@ -238,10 +246,10 @@ const YouTubePlayer: React.FC = () => {
               </div>
 
               {/* Player controls */}
-              <div className="flex-1 w-full space-y-6">
+              <div className="flex-1 w-full space-y-6 min-w-0">
                 <div>
                   <span className="text-green-400 font-bold tracking-widest text-xs uppercase mb-2 block">Now Playing</span>
-                  <h1 className="text-2xl md:text-3xl font-black text-white mb-2 truncate">
+                  <h1 className="text-2xl md:text-3xl font-black text-white mb-2 truncate w-full">
                     {currentTitle || "No song selected"}
                   </h1>
                   <p className="text-white/60 text-sm">
