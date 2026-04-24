@@ -202,10 +202,10 @@ const LocalPlayer: React.FC = () => {
         </label>
 
         {/* Mobile upload */}
-        <label className="md:hidden self-end mb-5 flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/8 text-white/70 font-syne font-bold text-xs cursor-pointer transition-all hover:bg-white/10">
-          <input type="file" accept="audio/*" multiple onChange={handleUpload} className="hidden" />
-          <span className="material-symbols-rounded text-base">upload</span>
-          Upload
+        <label className="md:hidden fixed top-3 right-4 z-40 flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/8 border border-white/10 text-white/70 font-syne font-bold text-xs cursor-pointer transition-all active:scale-95">
+        <input type="file" accept="audio/*" multiple onChange={handleUpload} className="hidden" />
+        <span className="material-symbols-rounded text-base">upload</span>
+        Upload
         </label>
 
         {/* Player card */}
