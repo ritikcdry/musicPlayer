@@ -149,8 +149,7 @@ const LocalPlayer: React.FC = () => {
     <div className="flex h-screen w-full bg-[#080b0f] text-white font-sans relative">
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+        
         .font-syne { font-family: 'Syne', sans-serif; }
         .font-mono-dm { font-family: 'DM Mono', monospace; }
         .seek-thumb-hidden::-webkit-slider-thumb { opacity: 0; }

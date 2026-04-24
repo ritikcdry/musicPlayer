@@ -146,9 +146,7 @@ const YouTubePlayer: React.FC = () => {
       style={{ fontFamily: "'Spline Sans', sans-serif", backgroundColor: "#0a0a0a" }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700;800&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
-
+        
         .glass-card {
           background: rgba(255,255,255,0.06);
           backdrop-filter: blur(24px);
